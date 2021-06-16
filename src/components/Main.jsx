@@ -4,8 +4,11 @@ import { useState } from 'react';
 import { Login } from './Login'
 import fireDb from "../fireDB";
 
-import {  Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { Categories } from './Categories';
+import { Mobiles } from './Mobiles';
+import { Laptops } from './Laptops';
+import { Appliances } from './Appliances';
 
 
 
@@ -14,7 +17,6 @@ export const Main = () => {
 
     const history = useHistory();
 
-    // const [trips, setTrips] = useState([]);
     const [user, setUser] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -42,10 +44,10 @@ export const Main = () => {
                         break;
                 }
             });
-            if(user){
-                history.push("/categories")
-            }
-        
+        if (user) {
+            history.push("/categories")
+        }
+
 
     }
 
@@ -61,7 +63,7 @@ export const Main = () => {
                     case "auth/email-already-in-use":
                     case "auth/invalid-email":
                         setEmailError(err.message);
-                        error =true;
+                        error = true;
                         console.log(error)
                         break;
                     case "auth/weak-password":
@@ -69,16 +71,16 @@ export const Main = () => {
                         error = true
                         console.log(error)
                         break;
-                    default: 
+                    default:
 
                 }
             }).finally(() => {
-                if(user && !error){
+                if (user && !error) {
                     history.push("/categories")
                 }
             })
-            
-            
+
+
 
     }
 
@@ -87,7 +89,7 @@ export const Main = () => {
         fireDb.auth().signOut();
         console.log("i happened")
         history.push("/")
-        
+
     }
 
     const authListener = () => {
@@ -107,32 +109,11 @@ export const Main = () => {
 
     useEffect(() => {
         authListener();
-        getTripsFromDatabase()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
- 
-    async function getTripsFromDatabase() {
 
-        // try {
-        //     const ref = fireDb.firestore().collection("trips")
-        //     const doc = await ref.where('user','==', user.email).get();
-        //     if (doc.empty) {
-        //         console.log('No matching documents.');
-        //         return;
-        //       }  
-        //       let dtrips = []
-        //       doc.forEach(doc => {
-        //           dtrips.push(doc.data())
-        //         console.log(doc.id, '=>', doc.data());
-        //       });
-              
-        //     //   setTrips(dtrips)
-        // }catch(e){
-        //     console.log(e.message)
-        // }
-        
-    }
+  
 
 
     const clearInput = () => {
@@ -146,42 +127,60 @@ export const Main = () => {
     }
     return (
         <div>
-                <Switch>
-                    <Route exact path="/" render={(props) => (
-                        <Login
-                            {...props}
-                            email={email}
-                            setEmail={setEmail}
-                            password={password}
-                            setPassword={setPassword}
-                            handleLogin={handleLogin}
-                            handleSignUp={handleSignUp}
-                            hasAccount={hasAccount}
-                            setHasAccount={setHasAccount}
-                            emailError={emailError}
-                            passwordError={passwordError}
-                        />
-                    )} />
+            <Switch>
+                <Route exact path="/" render={(props) => (
+                    <Login
+                        {...props}
+                        email={email}
+                        setEmail={setEmail}
+                        password={password}
+                        setPassword={setPassword}
+                        handleLogin={handleLogin}
+                        handleSignUp={handleSignUp}
+                        hasAccount={hasAccount}
+                        setHasAccount={setHasAccount}
+                        emailError={emailError}
+                        passwordError={passwordError}
+                    />
+                )} />
 
-                    <Route  path="/categories" render = {(props) => (
-                        <Categories
+                <Route path="/categories" render={(props) => (
+                    <Categories
                         {...props}
                         //  trips={trips}
                         //  setTrips={setTrips}
-                         user = {user.email}
-                         handleLogout = {handleLogout} />
-                    )} />  
-                        
-                    {/* <Route exact path = "/profile" render = {(props) => {
-                       return <ProfilePage 
-                            {...props}
-                            user={user.email}
-                            trips={trips}
-                            handleLogout = {handleLogout} />
-                        
-                    }} /> */}
-                    
-                </Switch>
+                        user={user.email}
+                        handleLogout={handleLogout} />
+                )} />
+
+                <Route exact path="/mobiles" render={(props) => {
+                    return <Mobiles
+                        {...props}
+                        user={user.email}
+                        // trips={trips}
+                        handleLogout={handleLogout} />
+
+                }} />
+
+                <Route exact path="/laptops" render={(props) => {
+                    return <Laptops
+                        {...props}
+                        user={user.email}
+                        // trips={trips}
+                        handleLogout={handleLogout} />
+
+                }} />
+
+                <Route exact path="/appliances" render={(props) => {
+                    return <Appliances
+                        {...props}
+                        user={user.email}
+                        // trips={trips}
+                        handleLogout={handleLogout} />
+
+                }} />
+
+            </Switch>
         </div>
     )
 }

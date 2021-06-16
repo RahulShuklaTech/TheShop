@@ -147,8 +147,7 @@ export const Main = () => {
                 <Route path="/categories" render={(props) => (
                     <Categories
                         {...props}
-                        //  trips={trips}
-                        //  setTrips={setTrips}
+                       
                         user={user.email}
                         handleLogout={handleLogout} />
                 )} />
@@ -157,7 +156,7 @@ export const Main = () => {
                     return <Mobiles
                         {...props}
                         user={user.email}
-                        // trips={trips}
+                       
                         handleLogout={handleLogout} />
 
                 }} />
@@ -166,7 +165,7 @@ export const Main = () => {
                     return <Laptops
                         {...props}
                         user={user.email}
-                        // trips={trips}
+                       
                         handleLogout={handleLogout} />
 
                 }} />
@@ -175,7 +174,7 @@ export const Main = () => {
                     return <Appliances
                         {...props}
                         user={user.email}
-                        // trips={trips}
+                       
                         handleLogout={handleLogout} />
 
                 }} />

@@ -6,7 +6,7 @@
   }
 
 body{
-    width: 100vw;
+        width: 100vw;
         height: 100%;
         padding-left: 10px ;
         background: lightskyblue;
@@ -15,13 +15,14 @@ body{
 .container{
     
         width: 100vw;
-        height: 100%;
+        min-height: calc(100vh - 100px);
         padding-left: 10px ;
         background: lightskyblue;
         display: flex;
         flex-direction: column;
         gap: 3rem;
         justify-content: center;
+        align-items: center;
     
 }
 
@@ -61,3 +62,31 @@ button{
     padding: 1rem;
 }
 
+
+.inner-container{
+    width: 90%;
+    height: 90%;
+    background: radial-gradient(
+        ellipse at left bottom,
+        rgba(22, 24, 47, 1) 0%,
+        rgba(38, 20, 72, 0.9) 59%,
+        rgba(17, 27, 75, 0.9) 100%
+      );
+    padding: 2rem;
+    color: white;
+    display: flex;
+    flex-direction: column ;
+    gap: 64px;
+}
+
+
+.mobiles,.appliances,.laptops{
+    background-color: whitesmoke;
+    padding: 1rem;
+    width: 20rem;
+}
+
+.logout{
+    align-self: flex-end;
+    
+}

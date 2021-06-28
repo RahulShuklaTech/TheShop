@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import fireDb from "../fireDB";
 import "./styles/ItemStyles.css"
+import Nav from './Nav';
 
 
 
-export const Mobiles = ({handleLogout}) => {
+
+export const Mobiles = ({ handleLogout }) => {
 
     const [phones, setPhones] = useState([])
 
@@ -22,13 +24,13 @@ export const Mobiles = ({handleLogout}) => {
             const ref = fireDb.firestore().collection("mobiles")
             const doc = await ref.get();
             if (doc.empty) {
-                console.log('No matching documents.');
                 return;
             }
             let dtrips = []
             doc.forEach(doc => {
-                dtrips.push(doc.data())
-                console.log(doc.id, '=>', doc.data());
+                let obj = doc.data();
+                obj.id = doc.id;
+                dtrips.push(obj)
             });
 
             setPhones(dtrips)
@@ -42,13 +44,13 @@ export const Mobiles = ({handleLogout}) => {
     async function addToDatabase(name, price, description, image, quantity) {
         const ref = fireDb.firestore().collection("mobiles")
 
-        await ref.add({
+        let product = await ref.add({
             name,
             price,
             description,
             image,
             quantity,
-            
+
 
         });
 
@@ -59,30 +61,23 @@ export const Mobiles = ({handleLogout}) => {
             description,
             image,
             quantity,
-            
+            id:product.id
 
         })
         setPhones(phonesCopy)
+        
 
     }
 
 
-    const deleteItem = async (name) =>{
+    const deleteItem = async (id) => {
         const ref = fireDb.firestore().collection("mobiles");
-        
-        const doc = await ref.where('name','==', name).get();
-        console.log("doc",doc)
-        doc.forEach(doc => {
-            
-          console.log(doc.id, '=>', doc.data());
-          
-
-        });
+        await ref.doc(id).delete();
         let phonesCopy = [...phones]
-        phonesCopy= phones.filter(item =>item.name !== name);
+        phonesCopy = phones.filter(item => item.name !== name);
         setPhones(phonesCopy)
-        
-        
+
+
     }
 
 
@@ -94,65 +89,69 @@ export const Mobiles = ({handleLogout}) => {
 
     return (
 
-        <div className = "container">
-            <h1>Mobiles</h1>
-            <button onClick = {handleLogout}>Logout</button>
-            <div className="items">
-                {
-                    phones.map((item, index) => <div className="item" key={index}>
-                        <div className="itemName">Name: {item.name}</div>
-                        <div className="itemDesc">Description: {item.description}</div>
-                        <div className="itemPrice">Price: {item.price}</div>
-                        <div className="image"><img src={item.image} alt={item.name} /></div>
-                        <div className= "delete"><button onClick = {() =>deleteItem(item.name)}>Remove Item</button></div>
-                    </div>)
-                }
-            </div>
-            <button onClick={() => setShowForm(form => !form)}>Add Mobile</button>
-            {showform && <div className="form">
-                <div><label htmlFor="name">Name</label>
-                    <input
-                        className="input-bar"
-                        type="text"
-                        onChange={(e) => setName(e.target.value)}
-                        value={name}
-                    />
-                </div>
-                <div><label htmlFor="price">Price</label>
-                    <input
-                        className="input-bar"
-                        type="number"
-                        onChange={(e) => setPrice(e.target.value)}
-                        value={price}
-                    />
-                </div>
-                <div><label htmlFor="desc">Description</label>
-                    <input
-                        className="input-bar"
-                        type="text"
-                        onChange={(e) => setDesc(e.target.value)}
-                        value={dec}
-                    />
-                </div>
-                <div><label htmlFor="image">Enter Image Url</label>
-                    <input
-                        className="input-bar"
-                        type="text"
-                        onChange={(e) => setImage(e.target.value)}
-                        value={image}
-                    />
-                </div>
-                <div><label htmlFor="image">Enter Quantity</label>
-                    <input
-                        className="input-bar"
-                        type="text"
-                        onChange={(e) => setQty(e.target.value)}
-                        value={qty}
-                    />
-                </div>
-                <div><button onClick = {() => {addToDatabase(name,price,dec,image,qty); setShowForm(false)}}>Submit</button></div>
-            </div>}
+        <div className="container">
+            <Nav/>
 
+            <div className="inner-container">
+               
+                <h1>Mobiles</h1>
+
+                <div className="items">
+                    {
+                        phones.map((item, index) => <div className="item" key={index}>
+                            <div className="itemName">Name: {item.name}</div>
+                            <div className="itemDesc">Description: {item.description}</div>
+                            <div className="itemPrice">Price: {item.price}</div>
+                            <div className="image"><img src={item.image} alt={item.name} /></div>
+                            <div className="delete"><button onClick={() => deleteItem(item.id)}>Remove Item</button></div>
+                        </div>)
+                    }
+                </div>
+                <button onClick={() => setShowForm(form => !form)}>Add Mobile</button>
+                {showform && <div className="form">
+                    <div><label htmlFor="name">Name</label>
+                        <input
+                            className="input-bar"
+                            type="text"
+                            onChange={(e) => setName(e.target.value)}
+                            value={name}
+                        />
+                    </div>
+                    <div><label htmlFor="price">Price</label>
+                        <input
+                            className="input-bar"
+                            type="number"
+                            onChange={(e) => setPrice(e.target.value)}
+                            value={price}
+                        />
+                    </div>
+                    <div><label htmlFor="desc">Description</label>
+                        <input
+                            className="input-bar"
+                            type="text"
+                            onChange={(e) => setDesc(e.target.value)}
+                            value={dec}
+                        />
+                    </div>
+                    <div><label htmlFor="image">Enter Image Url</label>
+                        <input
+                            className="input-bar"
+                            type="text"
+                            onChange={(e) => setImage(e.target.value)}
+                            value={image}
+                        />
+                    </div>
+                    <div><label htmlFor="image">Enter Quantity</label>
+                        <input
+                            className="input-bar"
+                            type="text"
+                            onChange={(e) => setQty(e.target.value)}
+                            value={qty}
+                        />
+                    </div>
+                    <div><button onClick={() => { addToDatabase(name, price, dec, image, qty); setShowForm(false) }}>Submit</button></div>
+                </div>}
+            </div>
         </div>
     )
 }

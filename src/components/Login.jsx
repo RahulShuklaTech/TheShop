@@ -18,7 +18,7 @@ export const Login = (props) => {
         <div className="login">
             
             <div className="loginContainer">
-                <h2 className ="welcome">Welcome to The SHop</h2>
+                <h2 className ="welcome">Welcome to The Shop</h2>
                 <label>Username</label>
                 <input
                     type="text"

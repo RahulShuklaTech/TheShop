@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import fireDb from "../fireDB";
+import Nav from './Nav';
 import "./styles/ItemStyles.css"
 
 
@@ -22,13 +23,13 @@ export const Appliances = ({handleLogout}) => {
             const ref = fireDb.firestore().collection("appliances")
             const doc = await ref.get();
             if (doc.empty) {
-                console.log('No matching documents.');
                 return;
             }
             let dtrips = []
             doc.forEach(doc => {
-                dtrips.push(doc.data())
-                console.log(doc.id, '=>', doc.data());
+                let obj = doc.data();
+                obj.id = doc.id;
+                dtrips.push(obj)
             });
 
             setPhones(dtrips)
@@ -42,13 +43,13 @@ export const Appliances = ({handleLogout}) => {
     async function addToDatabase(name, price, description, image, quantity) {
         const ref = fireDb.firestore().collection("appliances")
 
-        await ref.add({
+        let product = await ref.add({
             name,
             price,
             description,
             image,
             quantity,
-            
+
 
         });
 
@@ -59,7 +60,7 @@ export const Appliances = ({handleLogout}) => {
             description,
             image,
             quantity,
-            
+            id:product.id
 
         })
         setPhones(phonesCopy)
@@ -68,20 +69,13 @@ export const Appliances = ({handleLogout}) => {
 
 
     
-    const deleteItem = async (name) =>{
-        const ref = fireDb.firestore().collection("mobiles");
-        
-        const doc = await ref.where('name','==', name).get();
-        console.log("doc",doc)
-        doc.forEach(doc => {
-            
-          console.log(doc.id, '=>', doc.data());
-          
-
-        });
+    const deleteItem = async (id) =>{
+        const ref = fireDb.firestore().collection("appliances");
+        await ref.doc(id).delete();
         let phonesCopy = [...phones]
-        phonesCopy= phones.filter(item =>item.name !== name);
+        phonesCopy = phones.filter(item => item.name !== name);
         setPhones(phonesCopy)
+
         
         
     }
@@ -96,21 +90,22 @@ export const Appliances = ({handleLogout}) => {
    
     return (
         
-        <div>
+        <div className="container">
+            <Nav />
+            <div className="inner-container">
             <h1>Appliances</h1>
-            <button onClick = {handleLogout}>Logout</button>
             <div className = "items">
                 {
                     phones.map((item,index) => <div className ="item" key ={index}>
                         <div className="itemName">Name: {item.name}</div>
                         <div className="itemDesc">Description: {item.description}</div>
                         <div className="itemPrice">Price: {item.price}</div>
-                        <div className="image"><img src ={item.image} alt ={item.name} /></div>
-                        <div className= "delete"><button onClick = {() =>deleteItem(item.name)}>Remove Item</button></div>
+                        <div className="image"><img src ={item.image} alt ={item.id} /></div>
+                        <div className= "delete"><button onClick = {() =>deleteItem(item.id)}>Remove Item</button></div>
                     </div> )
                 }
             </div>
-            <button onClick={() => setShowForm(form => !form)}>Add Mobile</button>
+            <button onClick={() => setShowForm(form => !form)}>Add Appliance</button>
             {showform && <div className="form">
                 <div><label htmlFor="name">Name</label>
                     <input
@@ -154,7 +149,7 @@ export const Appliances = ({handleLogout}) => {
                 </div>
                 <div><button onClick = {() => {addToDatabase(name,price,dec,image,qty); setShowForm(false)}}>Submit</button></div>
             </div>}
-
+                </div>
         </div>
     )
 }

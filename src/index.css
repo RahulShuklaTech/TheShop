@@ -11,3 +11,29 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.nav-ul{
+  list-style-type: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.nav {
+  width: 25rem;
+  background-color: white;
+  color: black;
+  padding: .5rem;
+  margin-top: 1rem;
+}
+
+.form{
+  display: flex;
+  gap:.5rem;
+  flex-direction: column;
+  border: 2px solid red;
+  border-radius: 12px;
+  background-color: whitesmoke;
+  padding: 1rem;
+  color: black;
+}

@@ -97,7 +97,7 @@ export const Main = () => {
             if (user) {
                 clearInput();
                 setUser(user);
-
+                history.push("/categories")
 
 
 

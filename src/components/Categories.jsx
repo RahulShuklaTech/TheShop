@@ -9,7 +9,6 @@ export const Categories = () => {
         <div className="container">
             <Nav />
             <div className="inner-container">
-                <button class="logout">Log out</button>
                 <h1>Categories</h1>
                 <div className="mobiles"><Link to="/mobiles">Mobiles</Link></div>
                 <div className="laptops"><Link to="/laptops">Laptops</Link></div>
